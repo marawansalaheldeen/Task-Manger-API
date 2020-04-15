@@ -76,7 +76,7 @@ router.post('/users',async(req,res)=>{
     }
 })
 
-router.patch('/user/:id',async(req,res)=>{
+router.patch('/user/updateprofile',auth,async(req,res)=>{
     const updates = Object.keys(req.body)
     const allowedupdates = ["name","email","password","age"]
     const isvalidkey = updates.every((update)=>{
@@ -88,23 +88,34 @@ router.patch('/user/:id',async(req,res)=>{
         res.status(400).send({error:"invalid update"})
     }
     try {
-        const user = await User.findById(req.params.id)
+       // const user = await User.findById(req.params.id)
         updates.forEach((update)=>{
-            user[update] = req.body[update]
-            
+            req.user[update] = req.body[update] 
         })
-        await user.save()
+        await req.user.save()
+        res.send(req.user)
 
         //const user = await User.findByIdAndUpdate(req.params.id,req.body,{new:true,runValidators:true})
-        if(!user){
-            res.status(404).send()
-        }    
-        res.send(user)
     } catch (error) {
         res.status(400).send(error)
     }
 })
 
+router.delete('/user/delete',auth,async(req,res)=>{
+    try {
+        // const user = await User.findByIdAndDelete(req.params.id)
 
+        // if(!user){
+        //     res.status(404).send()
+        // }
+
+        await req.user.remove()
+        res.send(req.user)
+
+    } catch (error) {
+        console.log(error)
+        res.send(error)
+    }
+})
 
 module.exports = router
