@@ -2,6 +2,7 @@ const mongoose = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Task = require('./tasks')
 
 
 
@@ -54,6 +55,12 @@ const userSchema = new mongoose.Schema({
 
 /////////////////////////////////
 
+userSchema.virtual('tasks',{
+    ref:'tasks',
+    localField:'_id',
+    foreignField:'owner'
+})
+
 userSchema.methods.generateAuthToken = async function(){
         const user = this
         const token = jwt.sign({_id:user._id.toString()},'mytoken')
@@ -99,6 +106,11 @@ userSchema.pre('save',async function(next){
     next()
 })
 
+userSchema.pre('remove',async function(next){
+    const user = this
+    await Task.deleteMany({owner:user._id})
+    next()
+})
 
 const User = mongoose.model('users',userSchema)
 
