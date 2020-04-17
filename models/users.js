@@ -7,7 +7,11 @@ const Task = require('./tasks')
 
 
 const userSchema = new mongoose.Schema({
-    name:{
+    firstname:{
+        type:String,
+        required:true 
+    },
+    lastname:{
         type:String,
         required:true 
     },
@@ -42,7 +46,8 @@ const userSchema = new mongoose.Schema({
             if(value<0){
                 throw new Error ('not a valid age')
             }
-        }
+        },
+        default:20
     },
     tokens:[{
         token:{

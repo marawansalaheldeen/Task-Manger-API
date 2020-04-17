@@ -1,5 +1,7 @@
 const express = require('express')
-require('./mongoose')
+var path = require("path");
+
+//require('./mongoose')
 
 
 const taskRoute = require('./routers/task')
@@ -18,6 +20,17 @@ app.use(userRoute)
 
 app.use(taskRoute)
 
+app.use('/js',express.static(__dirname + '/node_modules/bootstrap/dist/js'));
+app.use('/js',express.static(__dirname + '/node_modules/jquery/dist/js'));
+app.use('/css',express.static(__dirname + '/node_modules/bootstrap/dist/css'));
+app.use(express.static(__dirname + '/assets'));
+app.use(express.static(__dirname + '/views'));
+
+
+
+
+
+app.set('view engine','ejs');
 
 
 app.listen(port,()=>{
