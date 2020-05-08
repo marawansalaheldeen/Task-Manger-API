@@ -32,25 +32,34 @@ router.post('/loginpage',urlencodedparser,async(req,res)=>{
     }
    // console.log(req.body.firstname,req.body.lastname,req.body.usermail,req.body.userpassword)
     const user = new User(sql)
+    const loginstatus= false
     try {
         await user.save()
         res.status(201).render('../views/home',{
             fname:req.body.firstname,
             lname:req.body.lastname,
+            loginstatus
         })
     } catch (error) {
         res.status(400).send(error)
     }
 })
 
-router.post('/users/login',async(req,res)=>{
-
+router.post('/users/login',urlencodedparser,async(req,res)=>{
     try {
         const user = await User.findByCredentials(req.body.email,req.body.password)
-
+        const fname = user.firstname
+        const lname = user.lastname
+        const loginstatus= true
         const token = await user.generateAuthToken()
 
-        res.send({user,token})
+        res.render('../views/home',{
+            user,
+            token,
+            fname,
+            lname,
+            loginstatus
+        })
     } catch (error) {
 
         console.log(error)
@@ -107,6 +116,7 @@ router.post('/users/logout',auth,async (req,res)=>{
     try {
         req.user.tokens = req.user.tokens.filter((token)=>{
             return token.token !== req.token
+
         })
 
         await req.user.save()

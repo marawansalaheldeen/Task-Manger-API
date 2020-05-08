@@ -36,15 +36,17 @@
 </div>
             </div>
             <div class="col-md-6   main" id="logid">
-                <form  method="post">
-                    <div class="col-md-12"> <label for="username">user name :</label> <input name="username" type="text" placeholder="">
+                <form action="<%= baseurl %>/users/login" method="post">
+                    <div class="col-md-12"> <label for="username">E-mail :</label>
+                         <input name="email" type="text" placeholder="">
                     </div>
-                    <div class="col-md-12"> <label for="password">password :</label> <input name="userpassword" type="password" placeholder=""></div>
+                    <div class="col-md-12"> <label for="password">password :</label>
+                         <input name="password" type="password" placeholder=""></div>
                     <div class="custom-control custom-switch col-md-6 offset-md-3 switch">
                         <input type="checkbox" class="custom-control-input" id="customSwitch1">
                         <label class="custom-control-label " for="customSwitch1">remember password</label>
                     </div>
-                    <button type="button" class="btn btn-success col-md-3 offset-md-4">login</button>
+                    <button name="submit" type="submit" class="btn btn-success col-md-3 offset-md-4">login</button>
                     <div class="col-md-12 links">
                         <p class="text-right"><small ><a href="..."> forget password</a></small></p>
 
