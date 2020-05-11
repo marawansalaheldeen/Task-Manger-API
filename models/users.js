@@ -7,11 +7,7 @@ const Task = require('./tasks')
 
 
 const userSchema = new mongoose.Schema({
-    firstname:{
-        type:String,
-        required:true 
-    },
-    lastname:{
+    name:{
         type:String,
         required:true 
     },
@@ -55,7 +51,10 @@ const userSchema = new mongoose.Schema({
             required:true
         }
     }]
-})
+},{
+    timestamps:true
+}
+)
 
 
 /////////////////////////////////

@@ -22,44 +22,25 @@ router.get('/loginpage',(req,res)=>{
     
 })
 
-router.post('/loginpage',urlencodedparser,async(req,res)=>{
+router.post('/newuser',async(req,res)=>{
+    const user = new User(req.body)
     
-    var sql = {
-        firstname:req.body.firstname,
-        lastname:req.body.lastname,
-        email:req.body.usermail,
-        password:req.body.userpassword
-    }
-   // console.log(req.body.firstname,req.body.lastname,req.body.usermail,req.body.userpassword)
-    const user = new User(sql)
-    const loginstatus= false
     try {
         await user.save()
-        res.status(201).render('../views/home',{
-            fname:req.body.firstname,
-            lname:req.body.lastname,
-            loginstatus
-        })
+        const token = await user.generateAuthToken()
+        res.status(201).send({user,token})
     } catch (error) {
         res.status(400).send(error)
     }
 })
 
-router.post('/users/login',urlencodedparser,async(req,res)=>{
+router.post('/users/login',async(req,res)=>{
     try {
         const user = await User.findByCredentials(req.body.email,req.body.password)
-        const fname = user.firstname
-        const lname = user.lastname
-        const loginstatus= true
         const token = await user.generateAuthToken()
 
-        res.render('../views/home',{
-            user,
-            token,
-            fname,
-            lname,
-            loginstatus
-        })
+        res.send({user,token})
+
     } catch (error) {
 
         console.log(error)
