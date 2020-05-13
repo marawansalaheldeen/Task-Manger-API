@@ -157,6 +157,8 @@ const upload = multer({
 })
 router.post('/profile/avatar',upload.single('avatar'),(req,res)=>{
     res.send()
+},(error,req,res,next)=>{
+    res.send({error:error.message})
 })
 
 module.exports = router
