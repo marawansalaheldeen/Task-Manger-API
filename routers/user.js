@@ -4,10 +4,12 @@ const auth = require('../middleware/auth')
 const bodyparser = require('body-parser')
 const mongoose = require('../mongoose')
 const expressValidators = require('express-validator')
+const multer = require('multer')
 var urlencodedparser = bodyparser.urlencoded({extended:true});
 const router = new express.Router()
 
 const baseurl = mongoose.baseurl
+
 
 
 router.get('/loginpage',(req,res)=>{
@@ -139,6 +141,22 @@ router.delete('/user/delete',auth,async(req,res)=>{
         console.log(error)
         res.send(error)
     }
+})
+
+const upload = multer({
+    dest:'avatar',
+    limits:{
+        fileSize:1000000000000000000
+    },
+    fileFilter(req,file,callback){
+        if(!file.originalname.endsWith('.pdf')){
+            return callback(new Error('file must be pdf'))
+        }
+        callback(undefined,true)
+    }
+})
+router.post('/profile/avatar',upload.single('avatar'),(req,res)=>{
+    res.send()
 })
 
 module.exports = router
